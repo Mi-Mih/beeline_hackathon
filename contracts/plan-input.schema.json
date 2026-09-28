@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/contracts/plan-input.schema.json",
+  "title": "Technician planning input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "plan_id", "locations", "requests", "technicians", "travel"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "plan_id": { "$ref": "#/$defs/id" },
+    "use_travel_history": { "type": "boolean" },
+    "planning_reason": { "enum": ["overnight", "replan"] },
+    "replan_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_at", "new_request_ids", "previous_routes"],
+      "properties": {
+        "event_at": { "type": "string", "format": "date-time" },
+        "new_request_ids": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "previous_routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["technician_id", "request_ids"],
+            "properties": {
+              "technician_id": { "$ref": "#/$defs/id" },
+              "request_ids": { "$ref": "#/$defs/uniqueStrings" }
+            }
+          }
+        },
+        "active_work": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["technician_id", "request_id", "location_id", "finish_at"],
+            "properties": {
+              "technician_id": { "$ref": "#/$defs/id" },
+              "request_id": { "$ref": "#/$defs/id" },
+              "location_id": { "$ref": "#/$defs/id" },
+              "finish_at": { "type": "string", "format": "date-time" }
+            }
+          }
+        }
+      }
+    },
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "address": { "type": "string" },
+          "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+          "longitude": { "type": "number", "minimum": -180, "maximum": 180 }
+        }
+      }
+    },
+    "requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "location_id", "duration_minutes", "window", "required_skills", "required_vehicle", "priority"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "location_id": { "$ref": "#/$defs/id" },
+          "duration_minutes": { "type": "integer", "minimum": 1 },
+          "work_type": { "enum": ["connection", "emergency", "equipment_order", "local_repair"] },
+          "window": { "$ref": "#/$defs/window" },
+          "required_skills": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "required_vehicle": { "type": ["string", "null"], "minLength": 1 },
+          "required_equipment": { "$ref": "#/$defs/uniqueStrings" },
+          "locked_technician_id": { "type": ["string", "null"], "minLength": 1 },
+          "priority": { "enum": ["normal", "high", "urgent"] }
+        }
+      }
+    },
+    "technicians": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "start_location_id", "available_from", "shift_end", "skills", "vehicle"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "name": { "type": "string", "minLength": 1 },
+          "start_location_id": { "$ref": "#/$defs/id" },
+          "available_from": { "type": "string", "format": "date-time" },
+          "shift_end": { "type": "string", "format": "date-time" },
+          "skills": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+          "vehicle": { "type": "string", "minLength": 1 },
+          "equipment": { "$ref": "#/$defs/uniqueStrings" }
+        }
+      }
+    },
+    "travel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["symmetric", "legs"],
+      "properties": {
+        "symmetric": { "type": "boolean" },
+        "legs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["from", "to", "minutes", "distance_km"],
+            "properties": {
+              "from": { "$ref": "#/$defs/id" },
+              "to": { "$ref": "#/$defs/id" },
+              "minutes": { "type": "integer", "minimum": 0 },
+              "distance_km": { "type": "number", "minimum": 0 },
+              "mode": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "nonEmptyUniqueStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

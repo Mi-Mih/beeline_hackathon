@@ -1,0 +1,22 @@
+[project]
+name = "beeline"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["ortools>=9.11"]
+
+[project.optional-dependencies]
+test = ["hypothesis>=6.112"]
+
+[project.scripts]
+beeline-planner = "backend.math_core.cli:main"
+beeline-web = "backend.web:main"
+beeline-audit = "backend.audit_data:main"
+beeline-routing-gateway = "backend.routing_gateway:main"
+beeline-map-scheduler = "backend.map_manager:scheduler_main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["backend*"]

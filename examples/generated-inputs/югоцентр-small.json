@@ -1,0 +1,788 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "data-югоцентр-small-2026-08-17",
+  "planning_reason": "overnight",
+  "locations": [
+    {
+      "id": "office",
+      "address": "г.Москва проезд Симферопольский, д.7"
+    },
+    {
+      "id": "request-79719",
+      "address": "Город Москва, б-р.Смоленский, д. 17 стр. 1"
+    },
+    {
+      "id": "request-18023",
+      "address": "г.Город Москва, пр-кт.Ленинский, д. 70/11"
+    },
+    {
+      "id": "request-49105",
+      "address": "Город Москва, ул.Ремизова, д. 15 к 2"
+    },
+    {
+      "id": "request-24132",
+      "address": "Город Москва, пр-кт.Балаклавский, д. 50"
+    },
+    {
+      "id": "request-95501",
+      "address": "Город Москва, ул.Затонная, д. 12 к 1"
+    },
+    {
+      "id": "request-76452",
+      "address": "Город Москва, ул.Каховка, д. 7 к 1"
+    },
+    {
+      "id": "request-46513",
+      "address": "Город Москва, ул.Шверника, д. 14/1 к 2"
+    },
+    {
+      "id": "request-80548",
+      "address": "Город Москва, ул.Садовники, д. 10 к 1"
+    },
+    {
+      "id": "request-26177",
+      "address": "Город Москва, ул.Академика Миллионщикова, д. 13 к 1"
+    },
+    {
+      "id": "request-93544",
+      "address": "Город Москва, б-р.Черноморский, д. 19 к 2"
+    },
+    {
+      "id": "request-86864",
+      "address": "Город Москва, б-р.Чонгарский, д. 1 к 4"
+    },
+    {
+      "id": "request-10776",
+      "address": "Город Москва, ул.Судостроительная, д. 36"
+    }
+  ],
+  "requests": [
+    {
+      "id": "REQ-79719",
+      "location_id": "request-79719",
+      "work_type": "connection",
+      "duration_minutes": 70,
+      "window": {
+        "start": "2026-08-17T12:00:00+03:00",
+        "end": "2026-08-17T14:00:00+03:00"
+      },
+      "required_skills": [
+        "connection"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "high"
+    },
+    {
+      "id": "REQ-18023",
+      "location_id": "request-18023",
+      "work_type": "emergency",
+      "duration_minutes": 80,
+      "window": {
+        "start": "2026-08-17T14:00:00+03:00",
+        "end": "2026-08-17T16:00:00+03:00"
+      },
+      "required_skills": [
+        "emergency"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "urgent"
+    },
+    {
+      "id": "REQ-49105",
+      "location_id": "request-49105",
+      "work_type": "equipment_order",
+      "duration_minutes": 20,
+      "window": {
+        "start": "2026-08-17T20:00:00+03:00",
+        "end": "2026-08-17T22:00:00+03:00"
+      },
+      "required_skills": [
+        "equipment_order"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "normal"
+    },
+    {
+      "id": "REQ-24132",
+      "location_id": "request-24132",
+      "work_type": "local_repair",
+      "duration_minutes": 30,
+      "window": {
+        "start": "2026-08-17T20:00:00+03:00",
+        "end": "2026-08-17T22:00:00+03:00"
+      },
+      "required_skills": [
+        "local_repair"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "normal"
+    },
+    {
+      "id": "REQ-95501",
+      "location_id": "request-95501",
+      "work_type": "local_repair",
+      "duration_minutes": 30,
+      "window": {
+        "start": "2026-08-17T20:00:00+03:00",
+        "end": "2026-08-17T22:00:00+03:00"
+      },
+      "required_skills": [
+        "local_repair"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "normal"
+    },
+    {
+      "id": "REQ-76452",
+      "location_id": "request-76452",
+      "work_type": "connection",
+      "duration_minutes": 70,
+      "window": {
+        "start": "2026-08-17T12:00:00+03:00",
+        "end": "2026-08-17T14:00:00+03:00"
+      },
+      "required_skills": [
+        "connection"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "high"
+    },
+    {
+      "id": "REQ-46513",
+      "location_id": "request-46513",
+      "work_type": "local_repair",
+      "duration_minutes": 30,
+      "window": {
+        "start": "2026-08-17T10:00:00+03:00",
+        "end": "2026-08-17T12:00:00+03:00"
+      },
+      "required_skills": [
+        "local_repair"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "normal"
+    },
+    {
+      "id": "REQ-80548",
+      "location_id": "request-80548",
+      "work_type": "connection",
+      "duration_minutes": 70,
+      "window": {
+        "start": "2026-08-17T16:00:00+03:00",
+        "end": "2026-08-17T18:00:00+03:00"
+      },
+      "required_skills": [
+        "connection"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "high"
+    },
+    {
+      "id": "REQ-26177",
+      "location_id": "request-26177",
+      "work_type": "local_repair",
+      "duration_minutes": 30,
+      "window": {
+        "start": "2026-08-17T20:00:00+03:00",
+        "end": "2026-08-17T22:00:00+03:00"
+      },
+      "required_skills": [
+        "local_repair"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "normal"
+    },
+    {
+      "id": "REQ-93544",
+      "location_id": "request-93544",
+      "work_type": "connection",
+      "duration_minutes": 70,
+      "window": {
+        "start": "2026-08-17T12:00:00+03:00",
+        "end": "2026-08-17T14:00:00+03:00"
+      },
+      "required_skills": [
+        "connection"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "high"
+    },
+    {
+      "id": "REQ-86864",
+      "location_id": "request-86864",
+      "work_type": "local_repair",
+      "duration_minutes": 30,
+      "window": {
+        "start": "2026-08-17T16:00:00+03:00",
+        "end": "2026-08-17T18:00:00+03:00"
+      },
+      "required_skills": [
+        "local_repair"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "normal"
+    },
+    {
+      "id": "REQ-10776",
+      "location_id": "request-10776",
+      "work_type": "connection",
+      "duration_minutes": 70,
+      "window": {
+        "start": "2026-08-17T12:00:00+03:00",
+        "end": "2026-08-17T14:00:00+03:00"
+      },
+      "required_skills": [
+        "connection"
+      ],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "high"
+    }
+  ],
+  "technicians": [
+    {
+      "id": "TECH-01",
+      "name": "Бахарев Андрей",
+      "start_location_id": "office",
+      "available_from": "2026-08-17T09:00:00+03:00",
+      "shift_end": "2026-08-18T00:00:00+03:00",
+      "skills": [
+        "connection",
+        "emergency",
+        "equipment_order",
+        "local_repair"
+      ],
+      "vehicle": "car",
+      "equipment": []
+    },
+    {
+      "id": "TECH-02",
+      "name": "Брюзгин Ярослав",
+      "start_location_id": "office",
+      "available_from": "2026-08-17T09:00:00+03:00",
+      "shift_end": "2026-08-18T00:00:00+03:00",
+      "skills": [
+        "connection",
+        "emergency",
+        "equipment_order",
+        "local_repair"
+      ],
+      "vehicle": "car",
+      "equipment": []
+    },
+    {
+      "id": "TECH-03",
+      "name": "Выговский Сергей",
+      "start_location_id": "office",
+      "available_from": "2026-08-17T09:00:00+03:00",
+      "shift_end": "2026-08-18T00:00:00+03:00",
+      "skills": [
+        "connection",
+        "emergency",
+        "equipment_order",
+        "local_repair"
+      ],
+      "vehicle": "car",
+      "equipment": []
+    },
+    {
+      "id": "TECH-04",
+      "name": "Данилов Даниил",
+      "start_location_id": "office",
+      "available_from": "2026-08-17T09:00:00+03:00",
+      "shift_end": "2026-08-18T00:00:00+03:00",
+      "skills": [
+        "connection",
+        "emergency",
+        "equipment_order",
+        "local_repair"
+      ],
+      "vehicle": "car",
+      "equipment": []
+    }
+  ],
+  "travel": {
+    "symmetric": true,
+    "legs": [
+      {
+        "from": "office",
+        "to": "request-79719",
+        "minutes": 51,
+        "distance_km": 19.97
+      },
+      {
+        "from": "office",
+        "to": "request-18023",
+        "minutes": 39,
+        "distance_km": 14.67
+      },
+      {
+        "from": "office",
+        "to": "request-49105",
+        "minutes": 13,
+        "distance_km": 4.11
+      },
+      {
+        "from": "office",
+        "to": "request-24132",
+        "minutes": 41,
+        "distance_km": 15.68
+      },
+      {
+        "from": "office",
+        "to": "request-95501",
+        "minutes": 45,
+        "distance_km": 17.3
+      },
+      {
+        "from": "office",
+        "to": "request-76452",
+        "minutes": 36,
+        "distance_km": 13.41
+      },
+      {
+        "from": "office",
+        "to": "request-46513",
+        "minutes": 46,
+        "distance_km": 17.55
+      },
+      {
+        "from": "office",
+        "to": "request-80548",
+        "minutes": 56,
+        "distance_km": 21.9
+      },
+      {
+        "from": "office",
+        "to": "request-26177",
+        "minutes": 56,
+        "distance_km": 21.91
+      },
+      {
+        "from": "office",
+        "to": "request-93544",
+        "minutes": 36,
+        "distance_km": 13.63
+      },
+      {
+        "from": "office",
+        "to": "request-86864",
+        "minutes": 15,
+        "distance_km": 4.75
+      },
+      {
+        "from": "office",
+        "to": "request-10776",
+        "minutes": 44,
+        "distance_km": 16.7
+      },
+      {
+        "from": "request-79719",
+        "to": "request-18023",
+        "minutes": 62,
+        "distance_km": 24.35
+      },
+      {
+        "from": "request-79719",
+        "to": "request-49105",
+        "minutes": 42,
+        "distance_km": 15.91
+      },
+      {
+        "from": "request-79719",
+        "to": "request-24132",
+        "minutes": 40,
+        "distance_km": 15.13
+      },
+      {
+        "from": "request-79719",
+        "to": "request-95501",
+        "minutes": 72,
+        "distance_km": 28.5
+      },
+      {
+        "from": "request-79719",
+        "to": "request-76452",
+        "minutes": 41,
+        "distance_km": 15.65
+      },
+      {
+        "from": "request-79719",
+        "to": "request-46513",
+        "minutes": 41,
+        "distance_km": 15.49
+      },
+      {
+        "from": "request-79719",
+        "to": "request-80548",
+        "minutes": 16,
+        "distance_km": 5.08
+      },
+      {
+        "from": "request-79719",
+        "to": "request-26177",
+        "minutes": 15,
+        "distance_km": 4.64
+      },
+      {
+        "from": "request-79719",
+        "to": "request-93544",
+        "minutes": 39,
+        "distance_km": 14.84
+      },
+      {
+        "from": "request-79719",
+        "to": "request-86864",
+        "minutes": 59,
+        "distance_km": 23.1
+      },
+      {
+        "from": "request-79719",
+        "to": "request-10776",
+        "minutes": 67,
+        "distance_km": 26.54
+      },
+      {
+        "from": "request-18023",
+        "to": "request-49105",
+        "minutes": 41,
+        "distance_km": 15.62
+      },
+      {
+        "from": "request-18023",
+        "to": "request-24132",
+        "minutes": 71,
+        "distance_km": 28.17
+      },
+      {
+        "from": "request-18023",
+        "to": "request-95501",
+        "minutes": 80,
+        "distance_km": 31.9
+      },
+      {
+        "from": "request-18023",
+        "to": "request-76452",
+        "minutes": 67,
+        "distance_km": 26.34
+      },
+      {
+        "from": "request-18023",
+        "to": "request-46513",
+        "minutes": 75,
+        "distance_km": 29.91
+      },
+      {
+        "from": "request-18023",
+        "to": "request-80548",
+        "minutes": 72,
+        "distance_km": 28.56
+      },
+      {
+        "from": "request-18023",
+        "to": "request-26177",
+        "minutes": 71,
+        "distance_km": 28.31
+      },
+      {
+        "from": "request-18023",
+        "to": "request-93544",
+        "minutes": 66,
+        "distance_km": 26.23
+      },
+      {
+        "from": "request-18023",
+        "to": "request-86864",
+        "minutes": 31,
+        "distance_km": 11.34
+      },
+      {
+        "from": "request-18023",
+        "to": "request-10776",
+        "minutes": 79,
+        "distance_km": 31.37
+      },
+      {
+        "from": "request-49105",
+        "to": "request-24132",
+        "minutes": 34,
+        "distance_km": 12.85
+      },
+      {
+        "from": "request-49105",
+        "to": "request-95501",
+        "minutes": 46,
+        "distance_km": 17.91
+      },
+      {
+        "from": "request-49105",
+        "to": "request-76452",
+        "minutes": 29,
+        "distance_km": 10.82
+      },
+      {
+        "from": "request-49105",
+        "to": "request-46513",
+        "minutes": 39,
+        "distance_km": 14.67
+      },
+      {
+        "from": "request-49105",
+        "to": "request-80548",
+        "minutes": 46,
+        "distance_km": 17.82
+      },
+      {
+        "from": "request-49105",
+        "to": "request-26177",
+        "minutes": 46,
+        "distance_km": 17.81
+      },
+      {
+        "from": "request-49105",
+        "to": "request-93544",
+        "minutes": 29,
+        "distance_km": 10.83
+      },
+      {
+        "from": "request-49105",
+        "to": "request-86864",
+        "minutes": 23,
+        "distance_km": 8.16
+      },
+      {
+        "from": "request-49105",
+        "to": "request-10776",
+        "minutes": 44,
+        "distance_km": 16.82
+      },
+      {
+        "from": "request-24132",
+        "to": "request-95501",
+        "minutes": 38,
+        "distance_km": 14.3
+      },
+      {
+        "from": "request-24132",
+        "to": "request-76452",
+        "minutes": 9,
+        "distance_km": 2.4
+      },
+      {
+        "from": "request-24132",
+        "to": "request-46513",
+        "minutes": 8,
+        "distance_km": 1.87
+      },
+      {
+        "from": "request-24132",
+        "to": "request-80548",
+        "minutes": 34,
+        "distance_km": 12.91
+      },
+      {
+        "from": "request-24132",
+        "to": "request-26177",
+        "minutes": 35,
+        "distance_km": 13.26
+      },
+      {
+        "from": "request-24132",
+        "to": "request-93544",
+        "minutes": 8,
+        "distance_km": 2.05
+      },
+      {
+        "from": "request-24132",
+        "to": "request-86864",
+        "minutes": 52,
+        "distance_km": 20.41
+      },
+      {
+        "from": "request-24132",
+        "to": "request-10776",
+        "minutes": 33,
+        "distance_km": 12.14
+      },
+      {
+        "from": "request-95501",
+        "to": "request-76452",
+        "minutes": 35,
+        "distance_km": 13.0
+      },
+      {
+        "from": "request-95501",
+        "to": "request-46513",
+        "minutes": 40,
+        "distance_km": 15.08
+      },
+      {
+        "from": "request-95501",
+        "to": "request-80548",
+        "minutes": 69,
+        "distance_km": 27.1
+      },
+      {
+        "from": "request-95501",
+        "to": "request-26177",
+        "minutes": 69,
+        "distance_km": 27.42
+      },
+      {
+        "from": "request-95501",
+        "to": "request-93544",
+        "minutes": 37,
+        "distance_km": 13.84
+      },
+      {
+        "from": "request-95501",
+        "to": "request-86864",
+        "minutes": 54,
+        "distance_km": 20.88
+      },
+      {
+        "from": "request-95501",
+        "to": "request-10776",
+        "minutes": 9,
+        "distance_km": 2.22
+      },
+      {
+        "from": "request-76452",
+        "to": "request-46513",
+        "minutes": 14,
+        "distance_km": 4.23
+      },
+      {
+        "from": "request-76452",
+        "to": "request-80548",
+        "minutes": 37,
+        "distance_km": 14.15
+      },
+      {
+        "from": "request-76452",
+        "to": "request-26177",
+        "minutes": 38,
+        "distance_km": 14.45
+      },
+      {
+        "from": "request-76452",
+        "to": "request-93544",
+        "minutes": 6,
+        "distance_km": 0.85
+      },
+      {
+        "from": "request-76452",
+        "to": "request-86864",
+        "minutes": 47,
+        "distance_km": 18.15
+      },
+      {
+        "from": "request-76452",
+        "to": "request-10776",
+        "minutes": 30,
+        "distance_km": 10.95
+      },
+      {
+        "from": "request-46513",
+        "to": "request-80548",
+        "minutes": 34,
+        "distance_km": 12.68
+      },
+      {
+        "from": "request-46513",
+        "to": "request-26177",
+        "minutes": 35,
+        "distance_km": 13.08
+      },
+      {
+        "from": "request-46513",
+        "to": "request-93544",
+        "minutes": 13,
+        "distance_km": 3.92
+      },
+      {
+        "from": "request-46513",
+        "to": "request-86864",
+        "minutes": 57,
+        "distance_km": 22.28
+      },
+      {
+        "from": "request-46513",
+        "to": "request-10776",
+        "minutes": 34,
+        "distance_km": 12.88
+      },
+      {
+        "from": "request-80548",
+        "to": "request-26177",
+        "minutes": 5,
+        "distance_km": 0.5
+      },
+      {
+        "from": "request-80548",
+        "to": "request-93544",
+        "minutes": 35,
+        "distance_km": 13.31
+      },
+      {
+        "from": "request-80548",
+        "to": "request-86864",
+        "minutes": 65,
+        "distance_km": 25.69
+      },
+      {
+        "from": "request-80548",
+        "to": "request-10776",
+        "minutes": 63,
+        "distance_km": 24.99
+      },
+      {
+        "from": "request-26177",
+        "to": "request-93544",
+        "minutes": 36,
+        "distance_km": 13.61
+      },
+      {
+        "from": "request-26177",
+        "to": "request-86864",
+        "minutes": 65,
+        "distance_km": 25.63
+      },
+      {
+        "from": "request-26177",
+        "to": "request-10776",
+        "minutes": 64,
+        "distance_km": 25.32
+      },
+      {
+        "from": "request-93544",
+        "to": "request-86864",
+        "minutes": 48,
+        "distance_km": 18.35
+      },
+      {
+        "from": "request-93544",
+        "to": "request-10776",
+        "minutes": 32,
+        "distance_km": 11.79
+      },
+      {
+        "from": "request-86864",
+        "to": "request-10776",
+        "minutes": 53,
+        "distance_km": 20.62
+      }
+    ]
+  }
+}

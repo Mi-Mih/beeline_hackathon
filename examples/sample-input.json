@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "demo-2026-08-17",
+  "locations": [
+    { "id": "office", "address": "ул. Верхние Поля, 14", "latitude": 55.6750, "longitude": 37.7620 },
+    { "id": "client-a", "address": "Люблинская ул., 78", "latitude": 55.6814, "longitude": 37.7447 },
+    { "id": "client-b", "address": "Братиславская ул., 12", "latitude": 55.6599, "longitude": 37.7502 },
+    { "id": "client-c", "address": "Новомарьинская ул., 18", "latitude": 55.6497, "longitude": 37.7368 },
+    { "id": "client-d", "address": "Перервинский б-р, 21", "latitude": 55.6581, "longitude": 37.7237 }
+  ],
+  "requests": [
+    {
+      "id": "REQ-1",
+      "location_id": "client-a",
+      "work_type": "connection",
+      "duration_minutes": 70,
+      "window": { "start": "2026-08-17T10:00:00+03:00", "end": "2026-08-17T12:00:00+03:00" },
+      "required_skills": ["connection"],
+      "required_vehicle": "car",
+      "required_equipment": ["router"],
+      "priority": "high"
+    },
+    {
+      "id": "REQ-2",
+      "location_id": "client-b",
+      "work_type": "emergency",
+      "duration_minutes": 80,
+      "window": { "start": "2026-08-17T10:00:00+03:00", "end": "2026-08-17T11:00:00+03:00" },
+      "required_skills": ["emergency"],
+      "required_vehicle": null,
+      "required_equipment": ["repair-kit"],
+      "priority": "urgent"
+    },
+    {
+      "id": "REQ-3",
+      "location_id": "client-c",
+      "work_type": "local_repair",
+      "duration_minutes": 30,
+      "window": { "start": "2026-08-17T11:00:00+03:00", "end": "2026-08-17T14:00:00+03:00" },
+      "required_skills": ["connection"],
+      "required_vehicle": null,
+      "required_equipment": [],
+      "priority": "normal"
+    },
+    {
+      "id": "REQ-4",
+      "location_id": "client-d",
+      "work_type": "equipment_order",
+      "duration_minutes": 20,
+      "window": { "start": "2026-08-17T12:00:00+03:00", "end": "2026-08-17T15:00:00+03:00" },
+      "required_skills": ["satellite"],
+      "required_vehicle": null,
+      "required_equipment": ["tv-box"],
+      "priority": "normal"
+    }
+  ],
+  "technicians": [
+    {
+      "id": "TECH-1",
+      "name": "Анна",
+      "start_location_id": "office",
+      "available_from": "2026-08-17T09:00:00+03:00",
+      "shift_end": "2026-08-17T18:00:00+03:00",
+      "skills": ["connection"],
+      "vehicle": "car",
+      "equipment": ["router"]
+    },
+    {
+      "id": "TECH-2",
+      "name": "Борис",
+      "start_location_id": "office",
+      "available_from": "2026-08-17T09:00:00+03:00",
+      "shift_end": "2026-08-17T18:00:00+03:00",
+      "skills": ["emergency", "connection"],
+      "vehicle": "pedestrian",
+      "equipment": ["repair-kit"]
+    }
+  ],
+  "travel": {
+    "symmetric": true,
+    "legs": [
+      { "from": "office", "to": "client-a", "minutes": 20, "distance_km": 8.0 },
+      { "from": "office", "to": "client-a", "mode": "pedestrian", "minutes": 32, "distance_km": 3.1 },
+      { "from": "office", "to": "client-b", "minutes": 15, "distance_km": 4.0 },
+      { "from": "office", "to": "client-b", "mode": "pedestrian", "minutes": 24, "distance_km": 2.3 },
+      { "from": "office", "to": "client-c", "minutes": 30, "distance_km": 12.0 },
+      { "from": "office", "to": "client-d", "minutes": 25, "distance_km": 10.0 },
+      { "from": "client-a", "to": "client-b", "minutes": 20, "distance_km": 6.0 },
+      { "from": "client-a", "to": "client-c", "minutes": 15, "distance_km": 5.0 },
+      { "from": "client-a", "to": "client-d", "minutes": 25, "distance_km": 9.0 },
+      { "from": "client-b", "to": "client-c", "minutes": 20, "distance_km": 7.0 },
+      { "from": "client-b", "to": "client-d", "minutes": 20, "distance_km": 7.0 },
+      { "from": "client-c", "to": "client-d", "minutes": 15, "distance_km": 5.0 }
+    ]
+  }
+}

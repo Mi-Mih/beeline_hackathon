@@ -1,0 +1,2 @@
+technician_id,departed_at,arrived_at,plan_id,request_id,origin_location_id,destination_location_id,vehicle_mode,osrm_seconds,osrm_distance_meters,origin_latitude,origin_longitude,destination_latitude,destination_longitude,graph_version
+TECH-1,2026-09-24T09:00:00+03:00,2026-09-24T09:18:30+03:00,PLAN-2026-09-24,REQ-101,OFFICE,LOC-101,car,900,8200,55.7558,37.6176,55.7812,37.6421,moscow-20260924

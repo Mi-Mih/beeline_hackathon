@@ -1,0 +1,11 @@
+[Unit]
+Description=Check whether the Moscow OSRM map update is due
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/beeline
+EnvironmentFile=/etc/beeline/routing.env
+ExecStart=/opt/beeline/.venv/bin/beeline-map-scheduler
+Nice=10
+IOSchedulingClass=idle

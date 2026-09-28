@@ -1,0 +1,76 @@
+{
+  "scenarios": [
+    {
+      "file": "восток-small.json",
+      "region": "Восток",
+      "scenario": "small",
+      "request_count": 12,
+      "technician_count": 4,
+      "travel_leg_count": 78
+    },
+    {
+      "file": "восток-medium.json",
+      "region": "Восток",
+      "scenario": "medium",
+      "request_count": 32,
+      "technician_count": 8,
+      "travel_leg_count": 528
+    },
+    {
+      "file": "восток-full.json",
+      "region": "Восток",
+      "scenario": "full",
+      "request_count": 66,
+      "technician_count": 12,
+      "travel_leg_count": 2211
+    },
+    {
+      "file": "юго-восток-small.json",
+      "region": "Юго-восток",
+      "scenario": "small",
+      "request_count": 12,
+      "technician_count": 4,
+      "travel_leg_count": 78
+    },
+    {
+      "file": "юго-восток-medium.json",
+      "region": "Юго-восток",
+      "scenario": "medium",
+      "request_count": 32,
+      "technician_count": 8,
+      "travel_leg_count": 528
+    },
+    {
+      "file": "юго-восток-full.json",
+      "region": "Юго-восток",
+      "scenario": "full",
+      "request_count": 83,
+      "technician_count": 12,
+      "travel_leg_count": 3486
+    },
+    {
+      "file": "югоцентр-small.json",
+      "region": "Югоцентр",
+      "scenario": "small",
+      "request_count": 12,
+      "technician_count": 4,
+      "travel_leg_count": 78
+    },
+    {
+      "file": "югоцентр-medium.json",
+      "region": "Югоцентр",
+      "scenario": "medium",
+      "request_count": 32,
+      "technician_count": 8,
+      "travel_leg_count": 528
+    },
+    {
+      "file": "югоцентр-full.json",
+      "region": "Югоцентр",
+      "scenario": "full",
+      "request_count": 56,
+      "technician_count": 11,
+      "travel_leg_count": 1596
+    }
+  ]
+}

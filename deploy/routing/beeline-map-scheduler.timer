@@ -1,0 +1,10 @@
+[Unit]
+Description=Check the configured Moscow map schedule hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

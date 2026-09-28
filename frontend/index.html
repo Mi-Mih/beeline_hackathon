@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#252722">
+  <title>Смена — планирование выездов</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha256-qx5w1Z7EBGW65+cDDaLzzPKBM/1QLmK9WY7vut/XpzI=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/styles.css?v=20260927-2">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">К рабочей области</a>
+  <header class="app-header">
+    <div class="brand" aria-label="Смена">
+      <span class="brand-mark" aria-hidden="true">С</span>
+      <div><strong>Смена</strong><span>Диспетчерская</span></div>
+    </div>
+    <div class="shift-title">
+      <h1>План выездов</h1>
+      <span id="plan-date">17 августа 2026</span>
+      <span id="dataset-note" class="dataset-note" hidden></span>
+      <span class="status-dot" role="status"><i aria-hidden="true"></i><span id="plan-status">План рассчитан</span></span>
+    </div>
+    <div class="header-actions">
+      <input id="file-input" type="file" accept="application/json,.json" hidden>
+      <button class="button secondary map-button" id="map-button" type="button"><span id="map-button-dot" class="map-status-dot"></span>Карта региона</button>
+      <button class="button secondary" id="load-button" type="button">Загрузить JSON</button>
+      <button class="button secondary" id="stress-demo-button" type="button">Демо: 30 бригад</button>
+      <button class="button secondary" id="travel-calibration-button" type="button">Калибровка времени</button>
+      <button class="button secondary" id="export-button" type="button">Экспорт</button>
+      <button class="button secondary" id="replan-button" type="button">Демо-события</button>
+      <button class="button primary" id="create-request-button" type="button">Создать заявку</button>
+    </div>
+  </header>
+
+  <section class="metrics-bar" aria-label="Показатели плана">
+    <div class="metric"><span>Назначено</span><strong id="metric-assigned">—</strong><em id="delta-assigned"></em></div>
+    <div class="metric"><span>Без назначения</span><strong id="metric-unassigned">—</strong><em id="delta-unassigned"></em></div>
+    <div class="metric"><span>Инженеров</span><strong id="metric-techs">—</strong><em id="delta-techs"></em></div>
+    <div class="metric"><span>Пробег</span><strong id="metric-distance">—</strong><em id="delta-distance"></em></div>
+    <div class="metric algorithm"><span>Расчёт</span><strong id="algorithm-label">—</strong><em id="runtime-label"></em></div>
+    <div class="metrics-actions">
+      <button class="text-button" id="reset-button" type="button">Вернуть исходный план</button>
+    </div>
+  </section>
+
+  <section class="live-toolbar" aria-label="Ручное планирование">
+    <div><strong id="pending-label" role="status">Нет новых заявок</strong><span id="live-note">Создайте заявку, затем пересчитайте план.</span></div>
+    <label for="event-at">Время события (Москва)<input id="event-at" type="datetime-local" required></label>
+    <button id="recalculate-button" class="button primary" type="button">Пересчитать</button>
+  </section>
+  <main class="workspace" id="workspace" tabindex="-1">
+    <aside class="requests-panel panel">
+      <div class="panel-heading">
+        <div><h2>Заявки</h2><span id="request-count">0</span></div>
+        <label class="search-field"><span class="sr-only">Поиск заявки</span><input id="request-search" type="search" placeholder="ID или адрес"><b aria-hidden="true">⌕</b></label>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Фильтр заявок">
+        <button class="tab active" data-filter="all" role="tab" aria-selected="true">Все</button>
+        <button class="tab" data-filter="priority" role="tab" aria-selected="false">Приоритетные</button>
+        <button class="tab" data-filter="unassigned" role="tab" aria-selected="false">Не назначены</button>
+      </div>
+      <div id="request-list" class="request-list" aria-live="polite"></div>
+      <div class="list-pager"><button id="requests-prev" type="button" aria-label="Предыдущие заявки">Назад</button><span id="requests-page"></span><button id="requests-next" type="button" aria-label="Следующие заявки">Далее</button></div>
+    </aside>
+
+    <section class="planning-surface">
+      <div class="map-panel panel">
+        <div class="map-toolbar">
+          <div><h2>Маршруты на карте</h2><span id="map-caption">Загрузка…</span></div>
+          <div class="map-actions-inline"><button id="map-all" class="text-button" type="button">Все бригады</button><button id="map-retry" class="text-button" type="button" hidden>Повторить загрузку пути</button></div>
+        </div>
+        <div class="map-wrap">
+          <div id="route-map" role="region" aria-label="Интерактивная карта маршрутов инженеров"></div>
+          <div class="map-key"><span><i class="marker assigned"></i>Назначена</span><span><i class="marker unassigned"></i>Без назначения</span></div>
+        </div>
+      </div>
+
+      <div class="timeline-panel panel">
+        <div class="timeline-toolbar">
+          <div><h2>График смены</h2><span>Работы · прокрутка по времени →</span></div>
+          <div class="timeline-controls" role="group" aria-label="Масштаб графика Ганта">
+            <button id="timeline-zoom-out" class="button compact" type="button" aria-label="Уменьшить масштаб графика">−</button>
+            <output id="timeline-zoom-label" aria-live="polite">100%</output>
+            <button id="timeline-zoom-in" class="button compact" type="button" aria-label="Увеличить масштаб графика">+</button>
+            <button id="timeline-fit" class="button compact" type="button">Вся смена</button>
+          </div>
+        </div>
+        <div id="timeline-scroll" class="timeline-scroll" tabindex="0" role="region" aria-label="График работ, прокрутка по времени и бригадам">
+          <div id="timeline-canvas" class="timeline-canvas">
+            <div class="timeline-heading"><div>Бригада</div><div class="timeline-scale" aria-hidden="true"></div></div>
+            <div id="timeline" class="timeline"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="details-panel panel">
+      <section class="crew-section">
+        <div class="panel-heading"><div><h2>Бригады / инженеры</h2><span id="tech-count">0</span></div>
+          <label class="search-field"><span class="sr-only">Поиск бригады</span><input id="technician-search" type="search" placeholder="Имя или ID бригады"></label>
+          <label class="crew-filter">Показать <select id="technician-filter"><option value="all">Всех</option><option value="assigned">С назначениями</option><option value="free">Без назначений</option></select></label>
+        </div>
+        <div id="technician-list" class="technician-list"></div>
+        <div class="list-pager"><button id="technicians-prev" type="button" aria-label="Предыдущие бригады">Назад</button><span id="technicians-page"></span><button id="technicians-next" type="button" aria-label="Следующие бригады">Далее</button></div>
+      </section>
+      <section class="changes-section" id="changes-section" hidden>
+        <h2>Что изменилось</h2>
+        <p id="changes-summary" class="changes-summary"></p>
+        <div id="changes-list" class="changes-list"></div>
+      </section>
+      <section class="decision-section" id="decision-section">
+        <h2 id="decision-title">Объяснение решения</h2>
+        <div id="decision-content" class="decision-content"><p>Выберите заявку на карте или в списке.</p></div>
+      </section>
+    </aside>
+  </main>
+
+  <dialog id="request-dialog" class="request-dialog" aria-labelledby="request-dialog-title">
+    <form id="request-form">
+      <div class="dialog-heading"><div><h2 id="request-dialog-title">Новая заявка</h2><p>Сохранение не меняет маршруты. Расчёт запускается отдельно.</p></div><button id="request-close" class="icon-button" type="button" aria-label="Закрыть создание заявки">×</button></div>
+      <div class="request-form-content">
+        <div class="trip-field"><label for="new-request-id">Номер заявки</label><input id="new-request-id" required maxlength="80"></div>
+        <div class="trip-field"><label for="new-address">Адрес</label><div class="address-search"><input id="new-address" required maxlength="300" list="known-addresses" placeholder="Город, улица, дом" autocomplete="off" aria-describedby="new-location-note"><button id="find-address" type="button" class="button secondary">Найти</button></div><datalist id="known-addresses"></datalist><input id="new-location" type="hidden" value="__new__"></div>
+        <p id="new-location-note" class="form-note" role="status" aria-live="polite"></p>
+        <p id="geocoding-privacy-note" class="form-note"></p>
+        <p id="geocoding-attribution" class="form-note" hidden>Поиск: Nominatim · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors, ODbL</a> · <a href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener noreferrer">Правила бесплатного API</a></p>
+        <div id="address-results" class="address-results" aria-label="Найденные адреса" hidden></div>
+        <details id="coordinate-details"><summary>Координаты точки / указать вручную</summary><div id="new-location-fields" class="request-form-grid">
+          <div class="trip-field"><label for="new-latitude">Широта</label><input id="new-latitude" type="number" step="any" min="-90" max="90" placeholder="55.75"></div>
+          <div class="trip-field"><label for="new-longitude">Долгота</label><input id="new-longitude" type="number" step="any" min="-180" max="180" placeholder="37.62"></div>
+        </div></details>
+        <p id="new-routing-note" class="form-note"></p>
+        <div class="request-form-grid">
+          <div class="trip-field"><label for="new-work-type">Вид работ</label><select id="new-work-type"><option value="connection">Подключение</option><option value="emergency">Авария</option><option value="equipment_order">Дозаказ</option><option value="local_repair">Локальный ремонт</option></select></div>
+          <div class="trip-field"><label for="new-priority">Приоритет</label><select id="new-priority"><option value="normal">Обычный</option><option value="high">Высокий</option><option value="urgent">Срочный</option></select></div>
+          <div class="trip-field"><label for="new-duration">Работы, минут</label><input id="new-duration" type="number" min="1" max="1440" step="1" required></div>
+          <div class="trip-field"><label for="new-skill">Навык</label><select id="new-skill"><option value="connection">Подключение</option><option value="emergency">Аварийные работы</option><option value="satellite">Спутниковое ТВ</option></select></div>
+          <div class="trip-field"><label for="new-window-start">Окно начала: с (Москва)</label><input id="new-window-start" type="datetime-local" required></div>
+          <div class="trip-field"><label for="new-window-end">Окно начала: до (Москва)</label><input id="new-window-end" type="datetime-local" required></div>
+          <div class="trip-field"><label for="new-vehicle">Транспорт</label><select id="new-vehicle"><option value="">Не важен</option><option value="car">Автомобиль</option><option value="pedestrian">Пешком</option></select></div>
+          <div class="trip-field"><label for="new-equipment">Оборудование через запятую</label><input id="new-equipment" maxlength="300" placeholder="router, repair-kit"></div>
+        </div>
+        <p class="form-note">Длительность подставляется по нормативу, её можно изменить. Поиск адреса запускается только по кнопке «Найти».</p>
+        <p id="request-form-error" class="form-error" role="alert" hidden></p>
+      </div>
+      <div class="dialog-actions"><button id="request-cancel" class="button secondary" type="button">Отмена</button><button id="save-request" class="button primary" type="submit">Сохранить заявку</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="travel-calibration-dialog" class="travel-calibration-dialog" aria-labelledby="calibration-title">
+    <form id="travel-calibration-form">
+      <div class="dialog-heading">
+        <div><h2 id="calibration-title">Экспериментальная калибровка времени</h2><p>Сравните прогноз OSRM с одной фактической поездкой инженера.</p></div>
+        <button id="travel-calibration-close" class="icon-button" type="button" aria-label="Закрыть">×</button>
+      </div>
+      <div class="calibration-content">
+        <section class="calibration-mode-section">
+          <h3>Расчёт времени в пути</h3>
+          <div id="travel-time-mode" class="travel-time-mode" aria-label="Расчёт времени передвижения">
+            <div class="segmented-control">
+              <button type="button" data-travel-time-mode="osrm" aria-pressed="true">Без калибровки</button>
+              <button type="button" data-travel-time-mode="history" aria-pressed="false">С калибровкой</button>
+            </div>
+            <small id="travel-time-mode-note">Время из OSRM без калибровки</small>
+          </div>
+        </section>
+        <section class="calibration-data-section">
+          <div class="calibration-section-heading">
+            <h3>Данные поездки</h3>
+            <p>Наблюдение сохранится для оценки идеи. Его можно применить переключателем «С калибровкой» в этом окне.</p>
+          </div>
+          <div class="trip-fields">
+            <div class="trip-row trip-row-points">
+              <div class="trip-field"><label for="calibration-technician">Инженер</label><select id="calibration-technician" required></select></div>
+              <div class="trip-field"><label for="calibration-origin">Точка А</label><select id="calibration-origin" required></select></div>
+              <div class="trip-field"><label for="calibration-destination">Точка Б</label><select id="calibration-destination" required></select></div>
+            </div>
+            <div class="trip-row trip-row-times">
+              <div class="trip-field"><label for="calibration-departed">Убытие</label><input id="calibration-departed" type="datetime-local" required></div>
+              <div class="trip-field"><label for="calibration-arrived">Прибытие</label><input id="calibration-arrived" type="datetime-local" required></div>
+            </div>
+          </div>
+          <div id="calibration-history" class="calibration-history"><i class="info-mark" aria-hidden="true">i</i><p>Выберите инженера, чтобы увидеть накопленные наблюдения.</p></div>
+          <div id="calibration-result" class="calibration-result" hidden></div>
+        </section>
+      </div>
+      <div class="dialog-actions">
+        <button id="travel-calibration-cancel" class="button secondary" type="button">Отмена</button>
+        <button id="travel-calibration-save" class="button primary" type="submit">Сравнить и сохранить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="map-dialog" class="map-dialog" aria-labelledby="map-dialog-title">
+    <form method="dialog" class="map-dialog-shell">
+      <div class="dialog-heading"><div><h2 id="map-dialog-title">Карта региона</h2><p>Локальный дорожный граф OSRM для планирования.</p></div><button class="icon-button" value="cancel" aria-label="Закрыть">×</button></div>
+      <div class="map-management">
+        <section class="map-current">
+          <div><h3 id="map-coverage">Москва</h3><p id="map-freshness">Карта ещё не инициализирована</p></div>
+          <span id="map-engine-status" class="status-pill">Не настроена</span>
+        </section>
+        <dl class="map-facts">
+          <div><dt>Версия</dt><dd id="map-version">—</dd></div>
+          <div><dt>Активирована</dt><dd id="map-activated">—</dd></div>
+          <div><dt>Режимы</dt><dd id="map-modes">—</dd></div>
+        </dl>
+        <section class="map-action-section">
+          <h3>Обновление</h3>
+          <p>Новая карта собирается в фоне. Планирование продолжает работать на активной версии.</p>
+          <div class="map-actions"><button id="map-update-button" class="button primary" type="button">Обновить из OpenStreetMap</button><button id="map-upload-button" class="button secondary" type="button">Загрузить .osm.pbf</button><input id="map-file-input" type="file" accept=".osm.pbf,application/octet-stream" hidden></div>
+          <div id="map-job" class="map-job" hidden></div>
+        </section>
+        <section class="map-action-section">
+          <h3>Автообновление</h3>
+          <div class="schedule-row"><label><input id="map-schedule-enabled" type="checkbox"> Включено</label><label>Каждые <input id="map-schedule-days" type="number" min="1" max="90" value="7"> дней</label><label>в <input id="map-schedule-time" type="time" value="02:00"></label><button id="map-schedule-save" class="button secondary" type="button">Сохранить</button></div>
+          <small>Часовой пояс: Europe/Moscow</small>
+        </section>
+        <section class="map-action-section"><h3>История обновлений</h3><div id="map-history" class="map-history"><p>Обновлений ещё не было.</p></div></section>
+      </div>
+      <div class="dialog-actions"><span class="osm-attribution">© OpenStreetMap contributors · OSRM</span><button class="button secondary" value="cancel">Закрыть</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="replan-dialog" class="replan-dialog" aria-labelledby="replan-title">
+    <form method="dialog">
+      <div class="dialog-heading"><div><h2 id="replan-title">Событие для перепланирования</h2><p>Проверьте реакцию плана на реальную ситуацию.</p></div><button class="icon-button" value="cancel" aria-label="Закрыть">×</button></div>
+      <div id="demo-pending-note" class="demo-pending-note" hidden><p id="demo-pending-count" role="status"></p><button id="demo-go-recalculate" type="button" class="button secondary">К пересчёту заявок</button></div>
+      <fieldset class="scenario-list" id="demo-scenarios">
+        <label><input type="radio" name="scenario" value="urgent" checked><span><strong>Срочная заявка</strong><small>Добавить аварийный выезд в текущую смену</small></span></label>
+        <label><input type="radio" name="scenario" value="ordinary"><span><strong>Новое подключение</strong><small>Вставить в свободный интервал без смены прежних назначений</small></span></label>
+        <label><input type="radio" name="scenario" value="cancel"><span><strong>Отмена заявки</strong><small>Убрать последнюю назначенную заявку</small></span></label>
+        <label><input type="radio" name="scenario" value="unavailable"><span><strong>Инженер недоступен</strong><small>Исключить инженера и перераспределить его маршрут</small></span></label>
+      </fieldset>
+      <div class="dialog-actions"><button class="button secondary" value="cancel">Отмена</button><button class="button primary" id="apply-scenario" value="default">Применить и рассчитать</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha256-RamwepGJzlYFTGIKlHzPQeKR5YyV6bYVM7dAqqZe5cs=" crossorigin="anonymous" defer></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>

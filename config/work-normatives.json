@@ -1,0 +1,38 @@
+{
+  "source": "data/new 18_09/Нормативы.xlsx",
+  "rule": "duration_minutes is technical_minutes + paperwork_minutes; route travel is supplied separately",
+  "items": {
+    "connection": {
+      "source_name": "Подключение клиентов Базовая",
+      "travel_allowance_minutes": 20,
+      "technical_minutes": 60,
+      "paperwork_minutes": 10,
+      "duration_minutes": 70,
+      "source_total_minutes": 90
+    },
+    "emergency": {
+      "source_name": "Аварий на ТКД",
+      "travel_allowance_minutes": 20,
+      "technical_minutes": 80,
+      "paperwork_minutes": 0,
+      "duration_minutes": 80,
+      "source_total_minutes": 100
+    },
+    "equipment_order": {
+      "source_name": "Дозаказ оборудования",
+      "travel_allowance_minutes": 20,
+      "technical_minutes": 10,
+      "paperwork_minutes": 10,
+      "duration_minutes": 20,
+      "source_total_minutes": 40
+    },
+    "local_repair": {
+      "source_name": "Локальная заявка/ремонт у клиента",
+      "travel_allowance_minutes": 20,
+      "technical_minutes": 30,
+      "paperwork_minutes": 0,
+      "duration_minutes": 30,
+      "source_total_minutes": 50
+    }
+  }
+}

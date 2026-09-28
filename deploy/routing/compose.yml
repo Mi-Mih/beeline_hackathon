@@ -1,0 +1,75 @@
+services:
+  osrm-car:
+    image: ${OSRM_IMAGE:-ghcr.io/project-osrm/osrm-backend:26.9.0-debian@sha256:8a1b1bc938412f15f9b5b32d794c4ec6bf4a85dfbbabfa0a014b70b187edb53b}
+    command: ["osrm-routed", "--algorithm", "mld", "--max-table-size", "100", "/data/car/moscow.osrm"]
+    volumes:
+      - ${ROUTING_DATA_ROOT:-/srv/beeline-routing}/active:/data:ro
+    expose: ["5000"]
+    restart: unless-stopped
+    mem_limit: ${OSRM_RUNTIME_MEMORY:-4g}
+
+  osrm-foot:
+    image: ${OSRM_IMAGE:-ghcr.io/project-osrm/osrm-backend:26.9.0-debian@sha256:8a1b1bc938412f15f9b5b32d794c4ec6bf4a85dfbbabfa0a014b70b187edb53b}
+    command: ["osrm-routed", "--algorithm", "mld", "--max-table-size", "100", "/data/foot/moscow.osrm"]
+    volumes:
+      - ${ROUTING_DATA_ROOT:-/srv/beeline-routing}/active:/data:ro
+    expose: ["5000"]
+    restart: unless-stopped
+    profiles: ["foot"]
+    mem_limit: ${OSRM_RUNTIME_MEMORY:-4g}
+
+  routing-gateway:
+    build:
+      context: ../..
+      dockerfile: deploy/routing/Dockerfile
+    environment:
+      OSRM_CAR_URL: http://osrm-car:5000
+      OSRM_FOOT_URL: ${OSRM_FOOT_URL:-}
+      ROUTING_GRAPH_VERSION: ${ROUTING_GRAPH_VERSION:-}
+      ROUTING_MANIFEST_PATH: /app/manifest.json
+    volumes:
+      - ${ROUTING_DATA_ROOT:-/srv/beeline-routing}/active/manifest.json:/app/manifest.json:ro
+    ports:
+      - "127.0.0.1:${ROUTING_GATEWAY_PORT:-4180}:4180"
+    command: ["--host", "0.0.0.0", "--port", "4180"]
+    depends_on:
+      osrm-car:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:4180/health', timeout=3).close()"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: deploy/routing/Dockerfile.backend
+    environment:
+      ROUTING_DATA_ROOT: ${ROUTING_DATA_ROOT:-/srv/beeline-routing}
+      ROUTING_STATE_DB: ${ROUTING_DATA_ROOT:-/srv/beeline-routing}/state/routing.sqlite3
+      ROUTING_UPLOAD_DIR: ${ROUTING_DATA_ROOT:-/srv/beeline-routing}/quarantine
+      ROUTING_UPDATE_COMMAND: python /app/scripts/build_moscow_osrm.py --compose-file /app/deploy/routing/compose.yml
+      ROUTING_GATEWAY_URL: http://routing-gateway:4180
+      ROUTING_MATRIX_MODE: gateway
+      ROUTING_WITH_FOOT: ${ROUTING_WITH_FOOT:-0}
+      ROUTING_MAX_UPLOAD_BYTES: ${ROUTING_MAX_UPLOAD_BYTES:-2000000000}
+      OSRM_IMAGE: ${OSRM_IMAGE:-ghcr.io/project-osrm/osrm-backend:26.9.0-debian@sha256:8a1b1bc938412f15f9b5b32d794c4ec6bf4a85dfbbabfa0a014b70b187edb53b}
+      OSMIUM_IMAGE: ${OSMIUM_IMAGE:-beeline-osmium:local}
+      OSRM_FOOT_URL: ${OSRM_FOOT_URL:-}
+    volumes:
+      - ${ROUTING_DATA_ROOT:-/srv/beeline-routing}:${ROUTING_DATA_ROOT:-/srv/beeline-routing}
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-4173}:4173"
+    command: ["--host", "0.0.0.0", "--port", "4173"]
+    depends_on:
+      routing-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:4173/api/health', timeout=3).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
